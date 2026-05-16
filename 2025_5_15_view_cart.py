@@ -11,19 +11,29 @@ driver.get("https://www.saucedemo.com/")
 
 wait = WebDriverWait(driver, 10)
 
+# Login
+wait.until(
+    EC.visibility_of_element_located((By.ID, "user-name"))
+).send_keys("standard_user")
 
-wait.until(EC.visibility_of_element_located((By.ID, "user-name"))).send_keys("standard_user")
 driver.find_element(By.ID, "password").send_keys("secret_sauce")
+
 driver.find_element(By.ID, "login-button").click()
 
+# Add product to cart
+wait.until(
+    EC.element_to_be_clickable((By.ID, "add-to-cart-sauce-labs-backpack"))
+).click()
 
-wait.until(EC.element_to_be_clickable((By.ID, "add-to-cart-sauce-labs-backpack"))).click()
+# Open cart
+wait.until(
+    EC.element_to_be_clickable((By.CLASS_NAME, "shopping_cart_link"))
+).click()
 
-
-wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "shopping_cart_link"))).click()
-
-
-cart_item = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "inventory_item_name")))
+# Verify product is visible in cart
+cart_item = wait.until(
+    EC.visibility_of_element_located((By.CLASS_NAME, "inventory_item_name"))
+)
 
 assert cart_item.text == "Sauce Labs Backpack"
 
